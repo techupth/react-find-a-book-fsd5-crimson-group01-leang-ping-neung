@@ -1,5 +1,5 @@
 import "./App.css";
-import axios, { Axios } from "axios";
+import axios from "axios";
 import { useState, useEffect } from "react";
 
 function App() {
@@ -7,10 +7,14 @@ function App() {
   const [bookList, setBookList] = useState([]);
 
   const getBookList = async () => {
-    const result = await axios.get(
-      `https://www.googleapis.com/books/v1/volumes?q=${searchMessage}`
-    );
-    setBookList(result.data.items);
+    try {
+      const result = await axios.get(
+        `https://www.googleapis.com/books/v1/volumes?q=${searchMessage}`
+      );
+      setBookList(result.data?.items ?? []); //  ? & ?? คือ ถ้าเป็น unidentified ให้แสดงผลเป็น array ว่างเปล่าแทน
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
